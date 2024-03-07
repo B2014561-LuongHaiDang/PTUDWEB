@@ -1,25 +1,25 @@
 const app = require("./app");
 const config = require("./app/config");
-// const MongoDB = require("./app/utils/mongodb.util");
+const MongoDB = require("./app/utils/mongodb.util");
 
-// async function startServer(){
-//     try{
-//         await MongoDB.connect(config.db.uri);
-//         console.log("Conencted to the database!");
+async function startServer(){
+    try{
+        await MongoDB.connect(config.db.uri);
+        console.log("Conencted to the database!");
 
-//         const PORT = config.app.port;
-//         app.listen(PORT, () => {
-//             console.log(`Server is running on port ${PORT}.`);
-//         });
-//     }catch (error) {
-//         console.log("Cannot connect to the database!", error);
-//         process.exit();
-//     }
-// }
+        const PORT = config.app.port;
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    }catch (error) {
+        console.log("Cannot connect to the database!", error);
+        process.exit();
+    }
+}
 
-// startServer();
+startServer();
 
-const PORT = config.app.port;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-});
+// const PORT = config.app.port;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}.`);
+// });

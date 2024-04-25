@@ -36,7 +36,6 @@ class BookService {
         return result;
     }
 
-
     async find(filter) {
         const cursor = await this.bookCollection.find(filter);
         return await cursor.toArray();

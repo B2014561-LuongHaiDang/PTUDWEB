@@ -1,6 +1,5 @@
 const express = require("express");
 const contacts = require("../controllers/contact.controller");
-
 const router = express.Router();
 
 router.route("/")
@@ -15,5 +14,8 @@ router.route("/:id")
 .get(contacts.findOne)
 .put(contacts.update)
 .delete(contacts.delete);
+
+router.route("/login")
+.post(contacts.login);
 
 module.exports = router;

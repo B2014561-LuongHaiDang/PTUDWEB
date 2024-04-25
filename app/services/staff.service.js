@@ -1,40 +1,38 @@
 const { ObjectId } = require("mongodb");
 class ContactService {
     constructor(client) {
-        this.contact = client.db().collection("contacts");
+        this.nhanvien = client.db().collection("staffs");
     }
     // Định nghĩa các phương thức truy xuất CSDL sử dụng mongodb API
-    extractConactData(payload) {
-        const contact = {
-            holot: payload.holot,
-            name: payload.name,
-            phai: payload.phai,
-            gioitinh: payload.gioitinh,
-            address: payload.address,
-            phone: payload.phone,
-            password: payload.password,
-            favorite: payload.favorite,
+    extractConactData(nv) {
+        const nhanvien = {
+            hotennv: nv.hotennv,
+            password: nv.password,
+            chucvu: nv.chucvu,
+            diachi: nv.diachi,
+            sodienthoai: nv.sodienthoai,
+            favorite: nv.favorite,
         };
         // Remove undefined fields
-        Object.keys(contact).forEach(
-            (key) => contact[key] === undefined && delete contact[key]
+        Object.keys(nhanvien).forEach(
+            (key) => nhanvien[key] === undefined && delete nhanvien[key]
         );
-        return contact;
+        return nhanvien;
     }
 
-    async create(payload) {
-        const existingUsers = await this.findByName(payload.name);
+    async create(nv) {
+        const existingUsers = await this.findByName(nv.name);
         if (existingUsers.length > 0) {
             return null;
         }
     
-        const contact = this.extractConactData(payload);
-        const result = await this.contact.insertOne(contact);
+        const nhanvien = this.extractConactData(nv);
+        const result = await this.nhanvien.insertOne(nhanvien);
         return result.insertedId;
     }
 
     async find(filter) {
-        const cursor = await this.contact.find(filter);
+        const cursor = await this.nhanvien.find(filter);
         return await cursor.toArray();
     }
 
@@ -45,17 +43,17 @@ class ContactService {
     }
 
     async findById(id) {
-        return await this.contact.findOne({
+        return await this.nhanvien.findOne({
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
     }
 
-    async update(id, payload) {
+    async update(id, nv) {
         const filter = {
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         };
-        const update = this.extractConactData(payload);
-        const result = await this.contact.findOneAndUpdate(
+        const update = this.extractConactData(nv);
+        const result = await this.nhanvien.findOneAndUpdate(
             filter,
             { $set: update },
             { returnDocument: "after" }
@@ -64,7 +62,7 @@ class ContactService {
     }
 
     async delete(id) {
-        const result = await this.contact.findOneAndDelete({
+        const result = await this.nhanvien.findOneAndDelete({
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
         return result;
@@ -75,12 +73,12 @@ class ContactService {
     }
 
     async deleteAll() {
-        const result = await this.contact.deleteMany({});
+        const result = await this.nhanvien.deleteMany({});
         return result.deletedCount;
     }
 
     async login(username, password) {
-        const user = await this.contact.findOne({ name: username });
+        const user = await this.nhanvien.findOne({ hotennv: username });
         if (!user) {
             throw new Error("User not found");
         }
